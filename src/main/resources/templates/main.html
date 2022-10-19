@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+    />
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="nav">
+            <a href="">Главная</a>
+            <a href="">Профиль</a>
+            <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
+        </div>
+
+    </div>
+</header>
+<section>
+
+    <div class="container">
+
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide card" th:each="gym: ${gyms}">
+                    <div class="gym-card">
+                        <div class="card-img"
+                             th:style="'background:url('+*{'data:image/jpeg;base64,'+{gym.image}}+');  background-repeat: no-repeat;background-size: cover;'"></div>
+
+<!--                        <img alt="" th:src="*{'data:image/jpeg;base64,'+{gym.image}}"-->
+<!--                             style=" min-height: 200px;max-height: 200px; width: 100%">-->
+                        <p>Город: <span th:text="${gym.getCity()}"></span></p>
+                        <p>Улица: <span th:text="${gym.getStreet()}"></span></p>
+                        <p>Дом: <span th:text="${gym.getHouse()}"></span></p>
+                        <a th:href="@{'/gym/' + ${gym.getId()} }" >Перейти к залу</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+
+        <div class="cards">
+            <div class="gym-card" th:each="gym: ${gyms}">
+
+                <img alt="" th:src="*{'data:image/jpeg;base64,'+{gym.image}}"
+                     style=" min-height: 200px;max-height: 200px; width: 100%">
+                <p>Город: <span th:text="${gym.getCity()}"></span></p>
+                <p>Улица: <span th:text="${gym.getStreet()}"></span></p>
+                <p>Дом: <span th:text="${gym.getHouse()}"></span></p>
+                <a href="#">Перейти к залу</a>
+            </div>
+        </div>
+    </div>
+</section>
+<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+<!--<div  sec:authorize="isAuthenticated()">-->
+<!--<form  th:action="@{/logout}" method="post">-->
+<!--    <input type="submit" value="Sign Out"/>-->
+<!--</form></div>-->
+<div th:each="gym: ${gyms}">
+    <p th:text="${gym.getCity()}"></p>
+    <p th:text="${gym.getStreet()}"></p>
+    <div th:if="${gym.image == ''}">
+        aasddsadas
+        <img alt="" src="https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+             style="width: 100px;height: 100px;">
+    </div>
+    <div th:unless="${gym.image == ''}">
+        <img alt="" th:src="*{'data:image/jpeg;base64,'+{gym.image}}" style="width: 100px;height: 100px;">
+    </div>
+
+
+</div>
+<div sec:authorize="hasRole('ROLE_TRAINER')">
+    This content is only shown to administrators.§§
+</div>
+
+<div>
+    <form action="/addGym" method="post" enctype="multipart/form-data">
+
+        <!-- Name -->
+        <input type="text" name="city" placeholder="City" required>
+
+        <!-- Price -->
+        <input type="text" name="street" placeholder="Street" required>
+        <input type="text" name="house" placeholder="House" required>
+        <!-- Description -->
+
+        <div class="custom-file mb-4">
+            <input type="file" name="file"
+                   id="customFile" required> <label
+                for="customFile">Product Image</label>
+        </div>
+        <!-- Sign in button -->
+        <button type="submit">add</button>
+    </form>
+</div>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+    });
+</script>
+</body>
+</html>
