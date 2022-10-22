@@ -1,6 +1,7 @@
 package com.example.bezishodnost.service;
 
 import com.example.bezishodnost.model.ERole;
+import com.example.bezishodnost.model.Person;
 import com.example.bezishodnost.model.Role;
 import com.example.bezishodnost.model.User;
 import com.example.bezishodnost.repo.RoleRepo;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
+
 
         user.setPassword(encoder().encode(user.getPassword()));
         Set<Role> roles = new HashSet<>();

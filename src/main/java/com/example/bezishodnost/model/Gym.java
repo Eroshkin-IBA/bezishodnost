@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Data
@@ -21,6 +22,9 @@ public class Gym implements Serializable {
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private String image;
+
+    @OneToMany(mappedBy = "gym")
+    private Set<Trainer> trainers;
 
 
 }

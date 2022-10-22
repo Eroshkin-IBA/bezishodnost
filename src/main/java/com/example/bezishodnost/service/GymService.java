@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -40,4 +41,12 @@ public class GymService {
 
         gymRepository.save(gym);
     }
+
+    public Gym getById(Integer id){
+        Optional<Gym> gymFromDb = gymRepository.findById(id);
+
+
+        return gymFromDb.get();
+    }
+
 }

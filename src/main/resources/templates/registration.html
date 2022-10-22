@@ -15,9 +15,17 @@
     You have been logged out.
 </div>
 registration
-<form th:action="@{/registration}" method="post">
-    <div><label> Login : <input type="text" name="login"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
+<form th:action="@{/registration}" th:object="${userPojo}" method="post">
+    <div><label> Логин : <input  type="text" name="login"/> </label></div>
+    <div><label> Пароль: <input  type="password" name="password"/> </label></div>
+    <div><label> Имя: <input  type="text" name="name"/> </label></div>
+    <div><label> Фамилия: <input  type="text" name="surName"/> </label></div>
+    <div><label> Дата рождения: <input t type="date" name="birthday"/> </label></div>
+    <div><label> Пол: <input  type="radio" id="boy" name="sex" value="1">
+        <label for="boy">Мужской</label><br>
+        <input  type="radio" id="girl" name="sex" value="0">
+        <label for="girl">Женский</label><br>   </label></div>
+
     <div><input type="submit" value="Sign In"/></div>
 </form>
 </body>

@@ -29,11 +29,9 @@ public class User {
     private String login;
 
     @NotEmpty(message = "{FormField.isEmpty}")
-    @Size(min=5)
+    @Size(min = 5)
     @Column(name = "password")
     private String password;
-
-
 
 
     @Column(name = "is_Active")
@@ -45,6 +43,13 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @OneToOne(mappedBy = "user")
+    private Trainer trainer;
+
+    @OneToOne(mappedBy = "user")
+    private Person person;
+
 
     public User(String login, String password, String fullName, boolean active) {
         this.login = login;
