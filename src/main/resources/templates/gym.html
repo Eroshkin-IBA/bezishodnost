@@ -13,10 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="background">
-    <div class="shape"></div>
-    <div class="shape"></div>
-</div>
+
 <header>
     <div class="container">
         <div class="nav">
@@ -35,7 +32,7 @@
 
     </div>
 </header>
-<section class="gym-img-section" th:style="'background:url('+*{'data:image/jpeg;base64,'+{gym.getImage()}}+');  background-repeat: no-repeat;background-size: cover; height: 500px'"></section>
+<section class="gym-img-section" th:style="'background:url('+*{'data:image/jpeg;base64,'+{gym.getImage()}}+');  background-repeat: no-repeat;background-size: cover; height: 800px'"></section>
 
 
 <!--<section style="margin-top: 40px">-->
@@ -68,6 +65,12 @@
 
 
 <!--    </div>-->
+
+<div th:each="trainer:${trainers}">
+    <p th:text="${trainer.getExperience()}"></p>
+    <img alt="" th:src="*{'data:image/jpeg;base64,'+{trainer.getImage()}}">
+</div>
+
 <!--</section>-->
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>

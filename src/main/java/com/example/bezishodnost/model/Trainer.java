@@ -16,14 +16,19 @@ public class Trainer {
     @Id
     @Column(name = "trainer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long trainerId;
+    private int trainerId;
 
 
     @ManyToOne
-    @JoinColumn(name = "gymId", nullable = true)
+    @JoinColumn(name = "gym_Id", nullable = true)
     private Gym gym;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
+
+    @Column(name = "experience")
+    private int experience;
+
+
 }

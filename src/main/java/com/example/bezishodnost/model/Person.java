@@ -26,6 +26,10 @@ public class Person {
     private String name;
     private String surName;
 
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private String image;
+
     private int sex;
 
 

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Gym implements Serializable {
 
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGBLOB")
     private String image;
 
     @OneToMany(mappedBy = "gym")

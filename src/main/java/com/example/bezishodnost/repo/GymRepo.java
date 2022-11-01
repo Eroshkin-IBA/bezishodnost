@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface GymRepo extends JpaRepository<Gym, Integer> {
     public Optional<Gym> findById(Integer id);
+
 }
 

@@ -83,6 +83,30 @@
                     <button type="submit">add</button>
                 </form>
             </div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <form action="/addTrainer" method="post" enctype="multipart/form-data">
+
+                <div><label> Логин : <input  type="text" name="login"/> </label></div>
+                <div><label> Пароль: <input  type="password" name="password"/> </label></div>
+                <div><label> Имя: <input  type="text" name="name"/> </label></div>
+                <div><label> Фамилия: <input  type="text" name="surname"/> </label></div>
+                <div><label> Опыт: <input  type="number" name="experience"/> </label></div>
+                <div><label> Пол: <input  type="radio" id="boy" name="sex" value="1">
+                    <label for="boy">Мужской</label><br>
+                    <input  type="radio" id="girl" name="sex" value="0">
+                    <label for="girl">Женский</label><br>   </label></div>
+
+
+
+                <div class="custom-file mb-4">
+                    <input type="file" name="file"
+                           id="trainerFile" required> <label
+                        for="trainerFile">trainer Image</label>
+                </div>
+                <!-- Sign in button -->
+                <button type="submit">add</button>
+            </form>
+        </div>
 
     </div>
 </section>

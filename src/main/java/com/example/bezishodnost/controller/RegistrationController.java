@@ -1,6 +1,8 @@
 package com.example.bezishodnost.controller;
 
+import com.example.bezishodnost.model.ERole;
 import com.example.bezishodnost.model.Person;
+import com.example.bezishodnost.model.Role;
 import com.example.bezishodnost.model.User;
 import com.example.bezishodnost.pojo.UserPojo;
 import com.example.bezishodnost.repo.UserRepo;
@@ -16,9 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @AllArgsConstructor
 @Controller
@@ -39,6 +39,11 @@ public class RegistrationController {
         user.setPassword(userPojo.getPassword());
         user.setLogin(userPojo.getLogin());
         user.setActive(true);
+        Set<Role> roles = new HashSet<>();
+        Role role = new Role(1l, ERole.ROLE_USER);
+
+        roles.add(role);
+        user.setRoles(roles);
 
         Person person = new Person();
         person.setName(userPojo.getName());
