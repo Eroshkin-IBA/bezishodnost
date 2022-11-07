@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/main.css" th:href="@{/css/main.css}" type="text/css">
+    <link rel="stylesheet" href="/static/css/header.css.css" th:href="@{/css/header.css}" type="text/css">
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="nav">
+            <div>
+                <a href="/">главная</a>
+            </div>
+            <div>
+                <a href="/profile/" th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
+                   style="padding-right: 40px; border-right: 2px solid white">профиль</a>
+                <a href="" style="margin-left: 40px">тренировки</a>
+            </div>
+            <div>
+                <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
+            </div>
+        </div>
+
+    </div>
+</header>
+<section>
+    <div class="container">
+        <form th:action="@{/addSchedule}" method="POST">
+            <div>
+                <input type="date" name="date" id="" required>
+            </div>
+            <div><label for="trainer">Choose a car:</label>
+                <select id="trainer" name="trainerId" style="color: black" >
+                    <option th:each="trainer: ${trainers}" style="color: black" th:value="${trainer.getTrainerId()}"
+                            th:text="${trainer.getName()}+${trainer.getSurName()}"></option>
+
+                </select>
+            </div>
+            <input type="submit">
+        </form>
+       <div class="schedules" >
+           <div class="scheduleCard" th:each="schedule: ${schedules}" >
+               <div style="display: flex; justify-content: space-around; width: 400px; font-size: 24px; margin: 7px">
+               <div th:text="${schedule.getSchedule().getDate().toString().substring(0,10)}"></div>
+               <div th:text="${schedule.getPerson().getName()}+ ' ' +${schedule.getPerson().getSurName()}"></div>
+               </div>
+               <hr style="width: 400px">
+
+           </div>
+
+       </div>
+
+    </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/main.css" th:href="@{/css/main.css}" type="text/css">
+    <link rel="stylesheet" href="/static/css/header.css.css" th:href="@{/css/header.css}" type="text/css">
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="nav">
+            <div>
+                <a href="/">главная</a>
+            </div>
+            <div>
+                <a href="/profile/" th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
+                   style="padding-right: 40px; border-right: 2px solid white">профиль</a>
+                <a href="" style="margin-left: 40px">тренировки</a>
+            </div>
+            <div>
+                <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
+            </div>
+        </div>
+
+    </div>
+</header>
+<div th:each="training: ${trainings}">
+    <p th:text="${training.getSchedule().getDate()}"></p>
+    <div th:each="time: ${training.getTrainingTimes()}">
+        <p th:text="${time.getStartTime()}"></p>
+    </div>
+</div>
+</body>
+</html>

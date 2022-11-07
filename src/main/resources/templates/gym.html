@@ -32,44 +32,42 @@
 
     </div>
 </header>
-<section class="gym-img-section" th:style="'background:url('+*{'data:image/jpeg;base64,'+{gym.getImage()}}+');  background-repeat: no-repeat;background-size: cover; height: 800px'"></section>
+<section class="gym-img-section" th:style="'background:url('+*{'data:image/jpeg;base64,'+{gym.getImage()}}+');  background-repeat: no-repeat;background-size: cover; height: 700px'">
+    <div class="container">
 
+        <h1 style="margin-bottom: 20px; padding-top: 20px; text-shadow: 2px 2px 2px black; font-size: 48px">Наши тренера</h1>
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide card" th:each="trainer: ${trainers}">
+                    <div class="gym-card" style="background-color: rgba(255,255,255,0.13);">
+                        <div class="card-img"
+                             th:style="'background:url('+*{'data:image/jpeg;base64,'+{trainer.getImage()}}+');  background-repeat: no-repeat;background-size: cover; height: 300px;'"></div>
+
+                        <!--                        <img alt="" th:src="*{'data:image/jpeg;base64,'+{gym.image}}"-->
+                        <!--                             style=" min-height: 200px;max-height: 200px; width: 100%">-->
+                        <p><span th:text="${trainer.getName()}"></span> <span th:text="${trainer.getSurName()}"></span> </p>
+                        <p>Стаж: <span th:text="${trainer.getExperience()}"></span></p>
+<!--                        <p>Пол: <span th:text="${gym.getHouse()}"></span></p>-->
+                        <center><a th:href="@{'/gym/' + ${gym.getId()}+'/trainer/'+ ${trainer.getTrainerId()} }">Записаться на тренировку</a></center>
+                    </div>
+                </div>
+
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+
+
+    </div>
+</section>
+<a th:href="@{'/gym/' + ${gym.getId()}+'/schedule' }" sec:authorize="hasRole('ROLE_ADMIN')"> Составить  расписание для зала</a>
 
 <!--<section style="margin-top: 40px">-->
 
-<!--    <div class="container">-->
-
-<!--        <h1 style="margin-bottom: 20px">Наши залы</h1>-->
-<!--        <div class="swiper mySwiper">-->
-<!--            <div class="swiper-wrapper">-->
-<!--                <div class="swiper-slide card" th:each="gym: ${gyms}">-->
-<!--                    <div class="gym-card">-->
-<!--                        <div class="card-img"-->
-<!--                             th:style="'background:url('+*{'data:image/jpeg;base64,'+{gym.image}}+');  background-repeat: no-repeat;background-size: cover;'"></div>-->
-
-<!--                        &lt;!&ndash;                        <img alt="" th:src="*{'data:image/jpeg;base64,'+{gym.image}}"&ndash;&gt;-->
-<!--                        &lt;!&ndash;                             style=" min-height: 200px;max-height: 200px; width: 100%">&ndash;&gt;-->
-<!--                        <p>Город: <span th:text="${gym.getCity()}"></span></p>-->
-<!--                        <p>Улица: <span th:text="${gym.getStreet()}"></span></p>-->
-<!--                        <p>Дом: <span th:text="${gym.getHouse()}"></span></p>-->
-<!--                        <center><a th:href="@{'/gym/' + ${gym.getId()} }">Перейти к залу</a></center>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--            </div>-->
-<!--            <div class="swiper-button-prev"></div>-->
-<!--            <div class="swiper-button-next"></div>-->
-<!--            <div class="swiper-pagination"></div>-->
-<!--        </div>-->
 
 
-
-<!--    </div>-->
-
-<div th:each="trainer:${trainers}">
-    <p th:text="${trainer.getExperience()}"></p>
-    <img alt="" th:src="*{'data:image/jpeg;base64,'+{trainer.getImage()}}">
-</div>
 
 <!--</section>-->
 <!-- Swiper JS -->

@@ -4,10 +4,7 @@ import com.example.bezishodnost.model.*;
 import com.example.bezishodnost.pojo.TrainerPojo;
 import com.example.bezishodnost.repo.TrainerRepo;
 import com.example.bezishodnost.repo.UserRepo;
-import com.example.bezishodnost.service.GymService;
-import com.example.bezishodnost.service.PersonService;
-import com.example.bezishodnost.service.TrainerService;
-import com.example.bezishodnost.service.UserService;
+import com.example.bezishodnost.service.*;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Controller;
@@ -19,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashSet;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @AllArgsConstructor
 @Controller
@@ -33,6 +29,8 @@ public class MainController {
     private final TrainerRepo trainerRepo;
     private final PersonService personService;
     private final TrainerService trainerService;
+    private final ScheduleService scheduleService;
+    private final TrainingService trainingService;
 
 
     @GetMapping("/")
@@ -61,12 +59,34 @@ public class MainController {
     }
 
 
-    @GetMapping("/aaa")
-    public String aaa(Model model) {
-
+    @GetMapping("/gym/{id}/schedule")
+    public String schedule(@PathVariable("id") Integer id, Model model) {
+        Gym gym = gymService.getById(id);
+        ArrayList<TrainerPojo> trainers = trainerService.getTrainersByGym(gym);
+        model.addAttribute("gym", gym);
         model.addAttribute("users", userRepo.findAll());
-        return "aaa";
+        model.addAttribute("trainers", trainers);
+        model.addAttribute("schedules", scheduleService.getScheduleByGym(gym, new Date()));
+        return "schedule";
     }
+
+    @PostMapping("/addSchedule")
+    public String addSchedule(@RequestParam("trainerId") int id, @RequestParam("date")String sDate) throws ParseException {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dd", Locale.ENGLISH);
+
+        Date date = formatter.parse(sDate);
+
+        Trainer trainerFromDB = trainerService.getTrainerById(id);
+        Schedule schedule = new Schedule();
+        schedule.setDate(date);
+        schedule.setTrainer(trainerFromDB);
+        schedule.setGym(trainerFromDB.getGym());
+        scheduleService.add(schedule);
+
+        return "redirect:/gym/" + trainerFromDB.getGym().getId()+"/schedule";
+    }
+
 
     @PostMapping("/addTrainer")
     public String addTrainer(@RequestParam("file") MultipartFile file, @RequestParam("login") String login,
@@ -103,6 +123,14 @@ public class MainController {
 
         trainerRepo.save(trainer);
         return "redirect:/";
+    }
+
+    @GetMapping("/gym/{id}/trainer/{trainerId}")
+    public String training(@PathVariable("id") Integer id,@PathVariable("trainerId") Integer trainerId, Model model){
+        Trainer trainer = trainerService.getTrainerById(trainerId);
+        model.addAttribute("trainings", trainingService.findFreeTraining(trainer));
+
+        return "trainer";
     }
 
 }

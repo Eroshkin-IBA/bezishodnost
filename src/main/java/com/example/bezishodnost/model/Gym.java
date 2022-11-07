@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,10 @@ public class Gym implements Serializable {
 
     @OneToMany(mappedBy = "gym")
     private Set<Trainer> trainers;
+
+
+    @OneToMany(mappedBy = "gym")
+    private Collection<Schedule> schedule;
 
 
 }

@@ -18,8 +18,8 @@ import java.util.Base64;
 @Service
 public class TrainerService {
 
-private final TrainerRepo trainerRepo;
-private final PersonRepo personRepo;
+    private final TrainerRepo trainerRepo;
+    private final PersonRepo personRepo;
 
     public ArrayList<Trainer> getAllTrainers() {
         ArrayList<Trainer> trainers = new ArrayList<>();
@@ -27,11 +27,12 @@ private final PersonRepo personRepo;
         return trainers;
     }
 
-    public ArrayList<TrainerPojo> getTrainersByGym(Gym gym){
+    public ArrayList<TrainerPojo> getTrainersByGym(Gym gym) {
         ArrayList<TrainerPojo> trainerPojoList = new ArrayList<>();
-        TrainerPojo trainerPojo=new TrainerPojo();
+
         Person person;
-        for (Trainer trainer: trainerRepo.findAllByGym(gym)) {
+        for (Trainer trainer : trainerRepo.findAllByGym(gym)) {
+            TrainerPojo trainerPojo = new TrainerPojo();
             trainerPojo.setTrainerId(trainer.getTrainerId());
             trainerPojo.setExperience(trainer.getExperience());
             person = personRepo.findByUser(trainer.getUser()).get();
@@ -42,6 +43,10 @@ private final PersonRepo personRepo;
             trainerPojoList.add(trainerPojo);
         }
         return trainerPojoList;
+    }
+
+    public Trainer getTrainerById(int id) {
+        return trainerRepo.findById(id).get();
     }
 
 //    public void addTrainer(MultipartFile file, String city, String street, String house) {
