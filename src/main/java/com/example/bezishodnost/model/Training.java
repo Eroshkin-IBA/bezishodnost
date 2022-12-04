@@ -18,7 +18,7 @@ public class Training {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int trainingId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
@@ -26,7 +26,7 @@ public class Training {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "trainingTime_id")
     private TrainingTime trainingTime;
 }

@@ -165,12 +165,12 @@
     <div class="shape"></div>
 </div>
 <form th:action="@{/login}" method="post">
-    <h3>Login Here</h3>
+    <h3>Вход</h3>
     <div th:if="${param.error}">
-        Invalid username and password.
+        Неправильный логин или пароль.
     </div>
     <div th:if="${param.logout}">
-        You have been logged out.
+        Вы вышли.
     </div>
     <label for="username">Логин</label>
     <input type="text" name="username" placeholder="Ваш логи" id="username">

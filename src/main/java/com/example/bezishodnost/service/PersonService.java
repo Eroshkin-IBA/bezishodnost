@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonService {
     private final PersonRepo personRepo;
-    public void save(Person person){
-        personRepo.save(person);
-    };
 
+    public void save(Person person) {
+        personRepo.save(person);
+    }
+
+
+    public Person findByUser(User user) {
+        return personRepo.findByUser(user).get();
+    }
 }

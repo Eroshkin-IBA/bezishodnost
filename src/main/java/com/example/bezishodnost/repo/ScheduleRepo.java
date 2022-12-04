@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ScheduleRepo extends JpaRepository<Schedule, Integer> {
-
+    Optional <Schedule> findById(int id);
     public List<Schedule> findAllByGymAndDateIsGreaterThanOrderByDate(Gym id, Date date);
-    public List<Schedule> findAllByTrainerOrderByDate(Trainer id);
+    public List<Schedule> findAllByTrainerAndDateIsGreaterThanOrderByDate(Trainer id, Date date);
 }

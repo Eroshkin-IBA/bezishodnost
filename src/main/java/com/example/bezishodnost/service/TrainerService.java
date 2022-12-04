@@ -3,6 +3,7 @@ package com.example.bezishodnost.service;
 import com.example.bezishodnost.model.Gym;
 import com.example.bezishodnost.model.Person;
 import com.example.bezishodnost.model.Trainer;
+import com.example.bezishodnost.model.User;
 import com.example.bezishodnost.pojo.TrainerPojo;
 import com.example.bezishodnost.repo.PersonRepo;
 import com.example.bezishodnost.repo.TrainerRepo;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -47,6 +49,11 @@ public class TrainerService {
 
     public Trainer getTrainerById(int id) {
         return trainerRepo.findById(id).get();
+    }
+
+
+    public Optional<Trainer> findByUser(User user){
+        return trainerRepo.findByUser(user);
     }
 
 //    public void addTrainer(MultipartFile file, String city, String street, String house) {

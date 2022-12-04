@@ -20,13 +20,14 @@
             <div>
                 <a href="/">главная</a>
             </div>
-            <div>
-                <a href="/profile/" th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
-                   style="padding-right: 40px; border-right: 2px solid white">профиль</a>
-                <a href="" style="margin-left: 40px">тренировки</a>
+            <div sec:authorize="isAuthenticated()">
+                <a   th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
+                     style="padding-right: 40px;">профиль</a>
+                <a  href="/gyms" style="margin-left: 40px">залы</a>
             </div>
             <div>
                 <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
+
             </div>
         </div>
 
@@ -34,12 +35,17 @@
 </header>
 <section class="gym-img-section" th:style="'background:url('+*{'data:image/jpeg;base64,'+{gym.getImage()}}+');  background-repeat: no-repeat;background-size: cover; height: 700px'">
     <div class="container">
-
+<h2 style="text-shadow: 2px 2px 2px black; text-align: center" th:text="'Спортивный зал по адресу: г.' + ${gym.getCity()} + ', ул.' + ${gym.getStreet()}+', дом '+ ${gym.getHouse()}"></h2>
         <h1 style="margin-bottom: 20px; padding-top: 20px; text-shadow: 2px 2px 2px black; font-size: 48px">Наши тренера</h1>
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
                 <div class="swiper-slide card" th:each="trainer: ${trainers}">
                     <div class="gym-card" style="background-color: rgba(255,255,255,0.13);">
+                        <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <form th:action="@{'/delTrainer/'+${trainer.getTrainerId()}}" method="post">
+                            <input type="hidden" name="gymId" th:value="${gym.getId()}">
+                            <center><input type="submit" value="удалить тренера"></center>
+                        </form></div>
                         <div class="card-img"
                              th:style="'background:url('+*{'data:image/jpeg;base64,'+{trainer.getImage()}}+');  background-repeat: no-repeat;background-size: cover; height: 300px;'"></div>
 
@@ -58,11 +64,11 @@
             <div class="swiper-pagination"></div>
         </div>
 
-
+       <center> <a style="display: block; color: black; width: 400px;padding: 10px; margin-top: -20px; background: white;border: black 2px solid; text-align: center" th:href="@{'/gym/' + ${gym.getId()}+'/schedule' }" sec:authorize="hasRole('ROLE_ADMIN')"> Составить расписание для зала</a></center>
 
     </div>
 </section>
-<a th:href="@{'/gym/' + ${gym.getId()}+'/schedule' }" sec:authorize="hasRole('ROLE_ADMIN')"> Составить  расписание для зала</a>
+
 
 <!--<section style="margin-top: 40px">-->
 

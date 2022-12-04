@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/main.css" th:href="@{/css/main.css}" type="text/css">
+    <link rel="stylesheet" href="/static/css/header.css.css" th:href="@{/css/header.css}" type="text/css">
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="nav">
+            <div>
+                <a href="/">главная</a>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <a   th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
+                     style="padding-right: 40px;">профиль</a>
+                <a  href="/gyms" style="margin-left: 40px" sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">залы</a>
+            </div>
+            <div>
+                <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
+
+            </div>
+        </div>
+
+    </div>
+</header>
+
+
+<section style="display: flex; justify-content: space-between; margin-top: 40px;" class="container">
+    <div class="gym-card" style="background-color: rgba(255,255,255,0.13); width: 300px; max-height: 500px;">
+        <div th:if="${#authentication.getPrincipal().getUserId()==id}"><h2 sec:authorize="hasRole('ROLE_ADMIN')" style="text-align: center">Администратор</h2>
+            <h2 sec:authorize="hasRole('ROLE_TRAINER')" style="text-align: center">Тренер</h2>
+            <h2 sec:authorize="hasRole('ROLE_USER')" style="text-align: center">Пользователь</h2></div>
+        <div class="card-img"
+             th:style="'background:url('+*{'data:image/jpeg;base64,'+{person.getImage()}}+');  background-repeat: no-repeat;background-size: cover; height: 300px; background-position:center;'"></div>
+        <p th:text="${person.getName()} + ' ' + ${person.getSurName()}"></p>
+        <p th:text="'Возвраст: ' + ${person.getAge()}"></p>
+        <p th:text="'номер телефона: ' +${person.getPhone()}"></p>
+    </div>
+    <div>
+        <div class="gym-card" style="background-color: rgba(255,255,255,0.13); width: 550px;" sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
+            <div th:if="${#authentication.getPrincipal().getUserId()==id}">
+                <h2 style="text-align: center">Мои тренировки</h2>
+                <div th:each="tr:${trainings}">
+                    <br>
+                    <p th:text="'Дата: ' +${tr.getSchedule().getDate().toString().substring(0,10)}
+             + '. Время: ' + ${tr.getTrainingTime().getStartTime()}+ '-'
+             + ${tr.getTrainingTime().getEndTime()} + '.'"></p>
+                    <p>Тренер: <a style="display: inline; background: none; color: white" th:href="@{'/profile/' + ${tr.getU().getUserId()}}" th:text=" ${tr.getTrainer().getName()}
+                + ' ' + ${tr.getTrainer().getSurName()}"></a></p>
+                    <p th:text="'Адрес: ' + 'город ' + ${tr.getGym().getCity()} + ', улица ' + ${tr.getGym().getStreet()} +', дом ' +${tr.getGym().getHouse()}"></p>
+                    <p>
+                    <form th:action="@{'/training/'+${tr.getId()}}" method="post">
+                    <input type="hidden" name="userId" th:value="${#authentication.getPrincipal().getUserId()}">
+                    <center><input type="submit" value="отменить запись"></center>
+                </form></p>
+                    <br>
+                    <hr>
+                </div>
+            </div>
+            <div th:unless="${#authentication.getPrincipal().getUserId()==id}">Это личная информация</div>
+        </div>
+
+
+        <div sec:authorize="hasRole('ROLE_TRAINER')" class="gym-card" style="background-color: rgba(255,255,255,0.13); width: 550px;">
+            <div th:if="${#authentication.getPrincipal().getUserId()==id}">
+                <h2 style="text-align: center">Я тренирую</h2>
+                <div th:each="tr:${ftt}">
+
+                    <center><h3 th:text="${tr.getSchedule().getDate().toString().substring(0,10)}"></h3></center>
+                    <div th:each="tt:${tr.getMyTrainings()}">
+                        <p th:text="'Время: ' + ${tt.getTrainingTime().getStartTime()}+ '-'
+             + ${tt.getTrainingTime().getEndTime()}"></p>
+                        <p>Клиент: <a style="display: inline; background: none; color: white" th:href="@{'/profile/' + ${tt.getU().getUserId()}}" th:text="${tt.getTrainer().getName()}
+                + ' ' + ${tt.getTrainer().getSurName()}"></a></p>
+                        <p th:text="'Адрес: ' + 'город ' + ${tt.getGym().getCity()} + ', улица ' + ${tt.getGym().getStreet()} +', дом ' +${tt.getGym().getHouse()}"></p>
+                        <p>
+                        <form th:action="@{'/training/'+${tt.getId()}}" method="post">
+                            <input type="hidden" name="userId" th:value="${#authentication.getPrincipal().getUserId()}">
+                            <center><input type="submit" value="отменить запись"></center>
+                        </form></p>
+                        <hr style="border: 1px dashed red;">
+                    </div>
+
+                    <hr style="border: 3px solid white;">
+
+
+                </div>
+            </div>
+            <div th:unless="${#authentication.getPrincipal().getUserId()==id}">Это личная информация</div>
+        </div>
+
+    </div>
+</section>
+
+
+</body>
+</html>

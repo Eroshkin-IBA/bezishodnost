@@ -1,32 +1,233 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example </title>
+    <!-- Design by foolishdeveloper.com -->
+    <title>Glassmorphism login Form Tutorial in html css</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <!--Stylesheet-->
+    <style media="screen">
+        *,
+        *:before,
+        *:after{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #080710;
+        }
+        .background{
+            width: 430px;
+            height: 520px;
+            position: absolute;
+            transform: translate(-50%,-50%);
+            left: 50%;
+            top: 50%;
+        }
+        .background .shape{
+            height: 400px;
+            width: 600px;
+            position: absolute;
+            border-radius: 50%;
+        }
+        .shape:first-child{
+            background: linear-gradient(
+                    #1845ad,
+                    #23a2f6
+            );
+            left: -80px;
+            top: -80px;
+        }
+        .shape:last-child{
+            background: linear-gradient(
+                    to right,
+                    #ff512f,
+                    #f09819
+            );
+            right: -30px;
+            bottom: -80px;
+        }
+        form{
+
+            width: 800px;
+            background-color: rgba(255,255,255,0.13);
+            position: absolute;
+            transform: translate(-50%,-50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(8,7,16,0.6);
+            padding: 50px 35px;
+        }
+        form *{
+            font-family: 'Poppins',sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+        form h3{
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+        }
+
+        label{
+            display: block;
+            margin-top: 30px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        input{
+            display: block;
+            height: 50px;
+            width: 300px;
+            background-color: rgba(255,255,255,0.07);
+            border-radius: 3px;
+            padding: 0 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        ::placeholder{
+            color: #e5e5e5;
+        }
+        button{
+            margin-top: 50px;
+            width: 50%;
+            background-color: #ffffff;
+            color: #080710;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .social{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+
+        }
+        .social div{
+            background: red;
+            width: 150px;
+            border-radius: 3px;
+            padding: 5px 10px 10px 5px;
+            background-color: rgba(255,255,255,0.27);
+            color: #eaf0fb;
+            text-align: center;
+        }
+        .social div:hover{
+            background-color: rgba(255,255,255,0.47);
+        }
+        .social .fb{
+            margin-left: 25px;
+        }
+        .social i{
+            margin-right: 4px;
+        }
+
+    </style>
 </head>
 <body>
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${message}">
-    <p th:text="${message}"></p>
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-registration
-<form th:action="@{/registration}" th:object="${userPojo}" method="post">
-    <div><label> Логин : <input  type="text" name="login"/> </label></div>
-    <div><label> Пароль: <input  type="password" name="password"/> </label></div>
-    <div><label> Имя: <input  type="text" name="name"/> </label></div>
-    <div><label> Фамилия: <input  type="text" name="surName"/> </label></div>
-    <div><label> Дата рождения: <input t type="date" name="birthday"/> </label></div>
-    <div><label> Пол: <input  type="radio" id="boy" name="sex" value="1">
-        <label for="boy">Мужской</label><br>
-        <input  type="radio" id="girl" name="sex" value="0">
-        <label for="girl">Женский</label><br>   </label></div>
 
-    <div><input type="submit" value="Sign In"/></div>
+<form th:action="@{/registration}" method="post" enctype="multipart/form-data">
+    <h3>Регистрация</h3>
+    <div th:if="${message}">
+        <p th:text="${message}"></p>
+    </div>
+<div style="display: flex; justify-content: space-around">
+    <div>
+    <label for="login">Логин</label>
+    <input type="text" name="login" placeholder="Ваш логи" id="login">
+
+    <label for="password">Пароль</label>
+    <input type="password" name="password" placeholder="Ваш пароль" id="password">
+
+    <label for="name">Имя</label>
+    <input type="text" name="name" placeholder="Ваше имя" id="name">
+
+    <label for="surName">Фамилия</label>
+    <input type="text" name="surName" placeholder="Ваша фамилия" id="surName">
+    </div>
+
+    <div>
+    <label for="phone">Номер телефона</label>
+    <input type="tel" name="phone" placeholder="+375(__)__-__-__"  id="phone">
+
+    <label for="birthday">День рождения</label>
+    <input type="date" name="date"  id="birthday">
+
+
+
+    <label for="img">Фотография</label>
+    <input type="file" name="file" style=""
+           id="img" onchange="showPreview(event);" required >
+
+        <div class="preview" style="margin-top: 20px" >
+            <img id="file-ip-1-preview" style="width: 150px; display: none">
+        </div>
+    </div>
+</div>
+    <div style="display: flex; justify-content: center;">
+    <button>Зарегистрироваться</button>
+    </div>
 </form>
+<script>
+    function showPreview(event){
+        if(event.target.files.length > 0){
+            var src = URL.createObjectURL(event.target.files[0]);
+            var preview = document.getElementById("file-ip-1-preview");
+            preview.src = src;
+            preview.style.display = "block";
+        }
+    }
+</script>
 </body>
 </html>
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"-->
+<!--      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">-->
+<!--<head>-->
+<!--    <title>Spring Security Example </title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div th:if="${param.error}">-->
+<!--    Invalid username and password.-->
+<!--</div>-->
+<!--<div th:if="${message}">-->
+<!--    <p th:text="${message}"></p>-->
+<!--</div>-->
+<!--<div th:if="${param.logout}">-->
+<!--    You have been logged out.-->
+<!--</div>-->
+<!--registration-->
+<!--<form th:action="@{/registration}" th:object="${userPojo}" method="post">-->
+<!--    <div><label> Логин : <input  type="text" name="login"/> </label></div>-->
+<!--    <div><label> Пароль: <input  type="password" name="password"/> </label></div>-->
+<!--    <div><label> Имя: <input  type="text" name="name"/> </label></div>-->
+<!--    <div><label> Фамилия: <input  type="text" name="surName"/> </label></div>-->
+<!--    <div><label> Дата рождения: <input t type="date" name="birthday"/> </label></div>-->
+<!--    <div><label> Пол: <input  type="radio" id="boy" name="sex" value="1">-->
+<!--        <label for="boy">Мужской</label><br>-->
+<!--        <input  type="radio" id="girl" name="sex" value="0">-->
+<!--        <label for="girl">Женский</label><br>   </label></div>-->
+
+<!--    <div><input type="submit" value="Sign In"/></div>-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->

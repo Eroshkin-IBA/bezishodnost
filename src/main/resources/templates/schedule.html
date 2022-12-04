@@ -20,44 +20,52 @@
             <div>
                 <a href="/">главная</a>
             </div>
-            <div>
-                <a href="/profile/" th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
-                   style="padding-right: 40px; border-right: 2px solid white">профиль</a>
-                <a href="" style="margin-left: 40px">тренировки</a>
+            <div sec:authorize="isAuthenticated()">
+                <a   th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
+                     style="padding-right: 40px;">профиль</a>
+                <a  href="/gyms" style="margin-left: 40px">залы</a>
             </div>
             <div>
                 <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
+
             </div>
         </div>
 
     </div>
 </header>
 <section>
+    <h1 style="text-align: center">Админ страница для создания расписания</h1>
     <div class="container">
         <form th:action="@{/addSchedule}" method="POST">
-            <div>
-                <input type="date" name="date" id="" required>
+            <div><label for="1">Выберите дату</label>
+                <input type="date" name="date" id="1" required>
             </div>
-            <div><label for="trainer">Choose a car:</label>
-                <select id="trainer" name="trainerId" style="color: black" >
+            <div><label for="trainer">Выберите тренера:</label>
+                <select id="trainer" name="trainerId" style="color: black">
                     <option th:each="trainer: ${trainers}" style="color: black" th:value="${trainer.getTrainerId()}"
                             th:text="${trainer.getName()}+${trainer.getSurName()}"></option>
 
                 </select>
             </div>
-            <input type="submit">
+            <input type="submit" value="создать">
         </form>
-       <div class="schedules" >
-           <div class="scheduleCard" th:each="schedule: ${schedules}" >
-               <div style="display: flex; justify-content: space-around; width: 400px; font-size: 24px; margin: 7px">
-               <div th:text="${schedule.getSchedule().getDate().toString().substring(0,10)}"></div>
-               <div th:text="${schedule.getPerson().getName()}+ ' ' +${schedule.getPerson().getSurName()}"></div>
-               </div>
-               <hr style="width: 400px">
+        <div class="schedules">
+            <div class="scheduleCard" th:each="schedule: ${schedules}">
+                <div style="display: flex; justify-content: space-between; width: 1000px; font-size: 28px; margin: 10px">
+                    <div th:text="${schedule.getSchedule().getDate().toString().substring(0,10)}"></div>
+                    <div th:text="${schedule.getPerson().getName()}+ ' ' +${schedule.getPerson().getSurName()}"></div>
+                    <div>
+                        <form th:action="@{/delSchedule}" method="post">
+                            <input type="hidden" name="gymId" th:value="${gym.getId()}" >
+                            <input type="hidden" name="scheduleId" th:value="${schedule.getSchedule().getId()}">
+                            <input type="submit" value="удалить">
+                        </form></div>
+                </div>
+                <hr style="width: 1000px">
 
-           </div>
+            </div>
 
-       </div>
+        </div>
 
     </div>
 </section>

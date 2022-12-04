@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 @Entity
@@ -30,6 +32,7 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
+
 
 
 

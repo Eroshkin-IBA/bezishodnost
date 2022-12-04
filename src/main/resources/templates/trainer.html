@@ -20,23 +20,42 @@
             <div>
                 <a href="/">главная</a>
             </div>
-            <div>
-                <a href="/profile/" th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
-                   style="padding-right: 40px; border-right: 2px solid white">профиль</a>
-                <a href="" style="margin-left: 40px">тренировки</a>
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
+                   style="padding-right: 40px;">профиль</a>
+                <a href="/gyms" style="margin-left: 40px">залы</a>
             </div>
             <div>
                 <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
+
             </div>
         </div>
-
     </div>
 </header>
-<div th:each="training: ${trainings}">
-    <p th:text="${training.getSchedule().getDate()}"></p>
-    <div th:each="time: ${training.getTrainingTimes()}">
-        <p th:text="${time.getStartTime()}"></p>
+<section>
+    <h1 style="text-align: center" th:text="'Тренер ' + ${trainer.getName()} + ' ' + ${trainer.getSurName()} + ' и его расписание'"></h1>
+    <div class="container">
+        <div th:each="training: ${trainings}">
+            <center><h1 th:text="${training.getSchedule().getDate().toString().substring(0,10)}"></h1></center>
+            <br>
+            <div style="display: flex">
+                <div th:each="time: ${training.getTrainingTimes()}" style="width: 20%; ">
+                    <center><p th:text="${time.getStartTime()}+ '-' + ${time.getEndTime()}"></p>
+                        <form th:action="@{/trainingReg}" method="post">
+                            <input type="hidden" name="timeId" th:value="${time.getId()}">
+                            <input type="hidden" name="scheduleId" th:value="${training.getSchedule().getId()}">
+                            <input type="hidden" name="userId" th:value="${#authentication.getPrincipal().getUserId()}">
+                            <input type="submit" value="Записаться">
+
+                        </form>
+                    </center>
+                </div>
+            </div>
+            <br>
+            <hr>
+        </div>
     </div>
-</div>
+</section>
+
 </body>
 </html>

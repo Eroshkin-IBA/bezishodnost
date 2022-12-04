@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TrainingRepo extends JpaRepository<Training, Integer> {
-    public List<Training> findAllBySchedule(Schedule schedule);
+    public List<Training> findAllByScheduleOrderByTrainingTime(Schedule schedule);
+    public List<Training> findAllByUser(User user);
+
     public Optional<Training> findByScheduleAndAndTrainingTime(Schedule schedule, TrainingTime trainingTime);
+    public Optional<Training> findByTrainingId(int id);
 }

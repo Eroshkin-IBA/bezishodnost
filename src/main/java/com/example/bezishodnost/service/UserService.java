@@ -9,4 +9,5 @@ public interface UserService {
     void save(User user);
 
     Optional<User> findByLogin(String login);
+    public Optional<User> findById(long id);
 }

@@ -11,6 +11,7 @@ class BezishodnostApplicationTests {
     void contextLoads() {
         User user = new User( );
 
+
     }
 
 }

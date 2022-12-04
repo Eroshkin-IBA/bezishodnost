@@ -12,24 +12,24 @@
     />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
-<div class="background">
-    <div class="shape"></div>
-    <div class="shape"></div>
-</div>
+
+
 <header>
     <div class="container">
         <div class="nav">
             <div>
                 <a href="/">главная</a>
             </div>
-            <div>
-                <a href="/profile/" th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
-                   style="padding-right: 40px; border-right: 2px solid white">профиль</a>
-                <a href="" style="margin-left: 40px">тренировки</a>
+            <div sec:authorize="isAuthenticated()">
+                <a   th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
+                     style="padding-right: 40px;">профиль</a>
+                <a  href="/gyms" style="margin-left: 40px">залы</a>
             </div>
             <div>
                 <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
+
             </div>
         </div>
 
@@ -62,50 +62,65 @@
             <div class="swiper-pagination"></div>
         </div>
 
-
-            <div sec:authorize="hasRole('ROLE_ADMIN')">
-                <form action="/addGym" method="post" enctype="multipart/form-data">
+        <div style="display: flex; justify-content: space-around">
+            <div sec:authorize="hasRole('ROLE_ADMIN')" STYLE="z-index: 999">
+                <h4>Регистрация зала</h4>
+                <form style="width: 350px; border: #e5e5e5 1px solid; padding: 20px" action="/addGym" method="post" enctype="multipart/form-data">
 
                     <!-- Name -->
-                    <input type="text" name="city" placeholder="City" required>
-
+                    <div>
+                        <input type="text" name="city" placeholder="Город" required>
+                    </div>
                     <!-- Price -->
-                    <input type="text" name="street" placeholder="Street" required>
-                    <input type="text" name="house" placeholder="House" required>
-                    <!-- Description -->
-
+                    <div>
+                        <input type="text" name="street" placeholder="Улица" required>
+                    </div>
+                    <div>
+                        <input type="text" name="house" placeholder="Дом" required>
+                        <!-- Description -->
+                    </div>
                     <div class="custom-file mb-4">
                         <input type="file" name="file"
                                id="customFile" required> <label
-                            for="customFile">Product Image</label>
+                            for="customFile">Фотография</label>
                     </div>
                     <!-- Sign in button -->
-                    <button type="submit">add</button>
+                    <button type="submit" style="width: 100px;color: black;">добавить зал</button>
                 </form>
             </div>
-        <div sec:authorize="hasRole('ROLE_ADMIN')">
-            <form action="/addTrainer" method="post" enctype="multipart/form-data">
+            <div sec:authorize="hasRole('ROLE_ADMIN')" STYLE="z-index: 999">
+                <h4>Регистрация тренера</h4>
+                <form style="width: 350px; border: #e5e5e5 1px solid; padding: 20px" action="/addTrainer" method="post" enctype="multipart/form-data">
 
-                <div><label> Логин : <input  type="text" name="login"/> </label></div>
-                <div><label> Пароль: <input  type="password" name="password"/> </label></div>
-                <div><label> Имя: <input  type="text" name="name"/> </label></div>
-                <div><label> Фамилия: <input  type="text" name="surname"/> </label></div>
-                <div><label> Опыт: <input  type="number" name="experience"/> </label></div>
-                <div><label> Пол: <input  type="radio" id="boy" name="sex" value="1">
-                    <label for="boy">Мужской</label><br>
-                    <input  type="radio" id="girl" name="sex" value="0">
-                    <label for="girl">Женский</label><br>   </label></div>
+                    <div><label> Логин : <input type="text" name="login"/> </label></div>
+                    <div><label> Пароль: <input type="password" name="password"/> </label></div>
+                    <div><label> Имя: <input type="text" name="name"/> </label></div>
+                    <div><label> Фамилия: <input type="text" name="surname"/> </label></div>
+                    <div><label> Дата рождения: <input type="date" name="date"/> </label></div>
+                    <div><label> Телефон: <input type="tel" name="tel" placeholder="+375(__)___-__-__"/> </label></div>
+                    <div><label> Опыт: <input type="number" name="experience"/> </label></div>
+                    <div style="display: flex"><label> Пол: <input type="radio" id="boy" name="sex" value="1">
+                        <label for="boy">Мужской</label><br>
+                        <input type="radio" id="girl" name="sex" value="0">
+                        <label for="girl">Женский</label><br> </label></div>
 
 
+                    <div class="custom-file mb-4">
+                        <input type="file" name="file"
+                               id="trainerFile" required> <label
+                            for="trainerFile">trainer Image</label>
+                    </div>
+                    <div><label for="trainer">Зал:</label>
+                        <select id="trainer" name="gymId" style="color: black" required>
+                            <option th:each="gym: ${gyms}" style="color: black" th:value="${gym.getId()}"
+                                    th:text="${gym.getCity()}+ ', ' + ${gym.getStreet()} + ', ' + ${gym.getHouse()}"></option>
 
-                <div class="custom-file mb-4">
-                    <input type="file" name="file"
-                           id="trainerFile" required> <label
-                        for="trainerFile">trainer Image</label>
-                </div>
-                <!-- Sign in button -->
-                <button type="submit">add</button>
-            </form>
+                        </select>
+                    </div>
+                    <!-- Sign in button -->
+                    <button type="submit" style="width: 100px;color: black;">Зарегистрировать</button>
+                </form>
+            </div>
         </div>
 
     </div>
@@ -128,5 +143,6 @@
         },
     });
 </script>
+
 </body>
 </html>

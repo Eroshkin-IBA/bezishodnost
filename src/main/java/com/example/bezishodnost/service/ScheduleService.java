@@ -25,6 +25,10 @@ public class ScheduleService {
         scheduleRepo.save(schedule);
     }
 
+    public Schedule findById(int id){
+        return scheduleRepo.findById(id).get();
+    }
+
     public ArrayList<SchedulePojo> getScheduleByGym(Gym gym, Date date){
         ArrayList<SchedulePojo> scheduleArrayList = new ArrayList<>();
         for (Schedule schedule:scheduleRepo.findAllByGymAndDateIsGreaterThanOrderByDate(gym, date)) {
@@ -42,10 +46,15 @@ public class ScheduleService {
         return scheduleArrayList;
     }
 
-    public ArrayList<Schedule> getScheduleByTrainer(Trainer trainer){
+    public ArrayList<Schedule> getScheduleByTrainer(Trainer trainer, Date date){
         ArrayList<Schedule> scheduleArrayList = new ArrayList<>();
-        scheduleRepo.findAllByTrainerOrderByDate(trainer).forEach(scheduleArrayList::add);
+        scheduleRepo.findAllByTrainerAndDateIsGreaterThanOrderByDate(trainer, date).forEach(scheduleArrayList::add);
         return scheduleArrayList;
+    }
+
+    public void delSchedule(int id){
+        Schedule schedule = scheduleRepo.findById(id).get();
+        scheduleRepo.delete(schedule);
     }
 
 }
