@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://containers-us-west-127.railway.app:5540/railway
-    username: root
-    password: UImkBbwPm9kRvGAdDKU6
-    name: railway
+    url: mysql://root:UImkBbwPm9kRvGAdDKU6@containers-us-west-127.railway.app:5540/railway
+    username: ${PROD_DB_USERNAME}
+    password: ${PROD_DB_PASSWORD}
+    name: bezishodnost
