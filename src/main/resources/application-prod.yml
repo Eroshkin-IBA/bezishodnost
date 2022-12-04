@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: mysql://${{ MYSQLUSER }}:${{ MYSQLPASSWORD }}@${{ MYSQLHOST }}:${{ MYSQLPORT }}/${{ MYSQLDATABASE }}
+    url: jdbc:mysql://${{ MYSQLUSER }}:${{ MYSQLPASSWORD }}@${{ MYSQLHOST }}:${{ MYSQLPORT }}/${{ MYSQLDATABASE }}
     username: ${PROD_DB_USERNAME}
     password: ${PROD_DB_PASSWORD}
     name: bezishodnost
+
