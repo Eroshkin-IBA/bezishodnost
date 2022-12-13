@@ -51,7 +51,7 @@ public class MainController {
 
             ArrayList<ForTrainerTrainings> ftt = trainingService.forTrainer(scheduleArrayList);
 
-            model.addAttribute("ftt",trainingService.forTrainer(scheduleArrayList));
+            model.addAttribute("ftt", trainingService.forTrainer(scheduleArrayList));
 
         }
         model.addAttribute("person", personService.findByUser(user));
@@ -89,7 +89,7 @@ public class MainController {
     public String addGym(@RequestParam("file") MultipartFile file, @RequestParam("city") String city,
                          @RequestParam("street") String street, @RequestParam("house") String house) {
         gymService.addGym(file, city, street, house);
-        return "redirect:/";
+        return "redirect:/gyms";
     }
 
 
@@ -133,10 +133,10 @@ public class MainController {
 
 
     @PostMapping("/addTrainer")
-    public String addTrainer(@RequestParam("file") MultipartFile file,@RequestParam("tel") String tel, @RequestParam("login") String login,
+    public String addTrainer(@RequestParam("file") MultipartFile file, @RequestParam("tel") String tel, @RequestParam("login") String login,
                              @RequestParam("password") String password, @RequestParam("name") String name,
                              @RequestParam("surname") String surname, @RequestParam("experience") int experience,
-                             @RequestParam("sex") int sex,@RequestParam("date") String sDate, @RequestParam("gymId") int gymId) throws ParseException {
+                             @RequestParam("sex") int sex, @RequestParam("date") String sDate, @RequestParam("gymId") int gymId) throws ParseException {
         User user = new User();
         user.setPassword(password);
         user.setLogin(login);
@@ -158,6 +158,7 @@ public class MainController {
         person.setSex(sex);
         person.setUser(user);
         person.setPhone(tel);
+        person.setBDate(date);
         try {
             person.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
         } catch (IOException e) {
@@ -172,7 +173,7 @@ public class MainController {
 
 
         trainerRepo.save(trainer);
-        return "redirect:/";
+        return "redirect:/gyms";
     }
 
     @GetMapping("/gym/{id}/trainer/{trainerId}")
@@ -182,7 +183,7 @@ public class MainController {
         cal.add(Calendar.DATE, -1);
         Date date = cal.getTime();
 
-model.addAttribute("trainer", personService.findByUser(trainer.getUser()));
+        model.addAttribute("trainer", personService.findByUser(trainer.getUser()));
         model.addAttribute("trainings", trainingService.findFreeTraining(trainer, date));
 
         return "trainer";
@@ -204,18 +205,41 @@ model.addAttribute("trainer", personService.findByUser(trainer.getUser()));
     }
 
     @PostMapping("/training/{id}")
-    public String del(@PathVariable("id") int id, @RequestParam("userId") int uId){
+    public String del(@PathVariable("id") int id, @RequestParam("userId") int uId) {
         trainingService.delete(trainingService.findById(id));
 
         return "redirect:/profile/" + uId;
     }
 
     @PostMapping("/delTrainer/{id}")
-    public String delT(@PathVariable("id") int id, @RequestParam("gymId") int uId){
+    public String delT(@PathVariable("id") int id, @RequestParam("gymId") int uId, Model model) {
+        try {
+            trainerRepo.delete(trainerRepo.findById(id).get());
+        } catch (Exception e) {
+            model.addAttribute("error", "Упс, что-то пошло не так");
+            return "redirect:/gym/" + uId;
+        }
 
-        trainerRepo.delete(trainerRepo.findById(id).get());
 
         return "redirect:/gym/" + uId;
+    }
+
+    @PostMapping("/updatePhone")
+    public String updatePhone(@RequestParam("id") int id, @RequestParam("phone") String phone, @RequestParam("userId") int uid){
+        personService.update(phone, (long)id);
+        return "redirect:/profile/" + uid;
+    }
+
+    @PostMapping("/updatePhoto")
+    public String updatePhoto(@RequestParam("id") int id, @RequestParam("file") MultipartFile file, @RequestParam("userId") int uid){
+        personService.updatePhoto(file, (long)id);
+        return "redirect:/profile/" + uid;
+    }
+
+    @PostMapping("/delGym/")
+    public String delGym(@RequestParam("id") int id){
+        gymService.delGym(id);
+        return "redirect:/gyms";
     }
 
 }

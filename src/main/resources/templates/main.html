@@ -44,6 +44,12 @@
             <div class="swiper-wrapper">
                 <div class="swiper-slide card" th:each="gym: ${gyms}">
                     <div class="gym-card">
+                        <form  sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/delGym/}" method="post">
+                            <input type="hidden" name="id" th:value="${gym.getId()}">
+                            <input type="submit" value="удалить зал">
+
+                        </form>
+
                         <div class="card-img"
                              th:style="'background:url('+*{'data:image/jpeg;base64,'+{gym.image}}+');  background-repeat: no-repeat;background-size: cover;'"></div>
 

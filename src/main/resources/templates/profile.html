@@ -13,7 +13,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+<style>
+    .custom-file-input {
+        margin-left: 30%;
+        color: transparent;
+    }
+    .custom-file-input::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+    .custom-file-input::before {
+        content: 'Выберите файл';
+        color: black;
+width: 100px;
+        background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
 
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+        text-shadow: 1px 1px #fff;
+
+    }
+    .custom-file-input:hover::before {
+        border-color: black;
+    }
+    .custom-file-input:active {
+        outline: 0;
+    }
+    .custom-file-input:active::before {
+        background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }
+</style>
 <header>
     <div class="container">
         <div class="nav">
@@ -21,9 +51,9 @@
                 <a href="/">главная</a>
             </div>
             <div sec:authorize="isAuthenticated()">
-                <a   th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
-                     style="padding-right: 40px;">профиль</a>
-                <a  href="/gyms" style="margin-left: 40px" sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">залы</a>
+                <a th:href="@{'/profile/'+${#authentication.getPrincipal().getUserId()}}"
+                   style="padding-right: 40px;">профиль</a>
+                <a href="/gyms" style="margin-left: 40px" sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">залы</a>
             </div>
             <div>
                 <a sec:authorize="isAuthenticated()" href="/logout">выход</a>
@@ -36,8 +66,9 @@
 
 
 <section style="display: flex; justify-content: space-between; margin-top: 40px;" class="container">
-    <div class="gym-card" style="background-color: rgba(255,255,255,0.13); width: 300px; max-height: 500px;">
-        <div th:if="${#authentication.getPrincipal().getUserId()==id}"><h2 sec:authorize="hasRole('ROLE_ADMIN')" style="text-align: center">Администратор</h2>
+    <div class="gym-card" style="background-color: rgba(255,255,255,0.13); width: 300px; max-height: 560px;">
+        <div th:if="${#authentication.getPrincipal().getUserId()==id}"><h2 sec:authorize="hasRole('ROLE_ADMIN')"
+                                                                           style="text-align: center">Администратор</h2>
             <h2 sec:authorize="hasRole('ROLE_TRAINER')" style="text-align: center">Тренер</h2>
             <h2 sec:authorize="hasRole('ROLE_USER')" style="text-align: center">Пользователь</h2></div>
         <div class="card-img"
@@ -45,9 +76,31 @@
         <p th:text="${person.getName()} + ' ' + ${person.getSurName()}"></p>
         <p th:text="'Возвраст: ' + ${person.getAge()}"></p>
         <p th:text="'номер телефона: ' +${person.getPhone()}"></p>
+        <center><div th:if="${#authentication.getPrincipal().getUserId()==id}">
+            <button style="color: black" onclick="show()">изменить номер</button>
+            <form style="display: none" th:action="@{/updatePhone}" method="post" id="update">
+                <input type="hidden" name="id" th:value="${person.getId()}">
+                <input type="hidden" name="userId" th:value="${id}">
+                <input type="tel" name="phone" required>
+                <input type="submit" value="изменить">
+            </form>
+            <form th:action="@{/updatePhoto}"  method="post"  enctype="multipart/form-data">
+                <label for="img">Изменить фотографию</label>
+                <input type="hidden" name="id" th:value="${person.getId()}">
+                <input type="hidden" name="userId" th:value="${id}">
+                <input type="file" name="file" style=""
+                       id="img" class="custom-file-input" onchange="showPreview(event);" required>
+                <input type="submit"  value="изменить фотографию">
+                <div  class="preview" style="margin-top: 40px">
+                    <img id="file-ip-1-preview" style="width: 150px; display: none">
+                </div>
+            </form>
+
+        </div></center>
     </div>
     <div>
-        <div class="gym-card" style="background-color: rgba(255,255,255,0.13); width: 550px;" sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
+        <div class="gym-card" style="background-color: rgba(255,255,255,0.13); width: 550px;"
+             sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
             <div th:if="${#authentication.getPrincipal().getUserId()==id}">
                 <h2 style="text-align: center">Мои тренировки</h2>
                 <div th:each="tr:${trainings}">
@@ -55,14 +108,16 @@
                     <p th:text="'Дата: ' +${tr.getSchedule().getDate().toString().substring(0,10)}
              + '. Время: ' + ${tr.getTrainingTime().getStartTime()}+ '-'
              + ${tr.getTrainingTime().getEndTime()} + '.'"></p>
-                    <p>Тренер: <a style="display: inline; background: none; color: white" th:href="@{'/profile/' + ${tr.getU().getUserId()}}" th:text=" ${tr.getTrainer().getName()}
+                    <p>Тренер: <a style="display: inline; background: none; color: white"
+                                  th:href="@{'/profile/' + ${tr.getU().getUserId()}}" th:text=" ${tr.getTrainer().getName()}
                 + ' ' + ${tr.getTrainer().getSurName()}"></a></p>
                     <p th:text="'Адрес: ' + 'город ' + ${tr.getGym().getCity()} + ', улица ' + ${tr.getGym().getStreet()} +', дом ' +${tr.getGym().getHouse()}"></p>
                     <p>
                     <form th:action="@{'/training/'+${tr.getId()}}" method="post">
-                    <input type="hidden" name="userId" th:value="${#authentication.getPrincipal().getUserId()}">
-                    <center><input type="submit" value="отменить запись"></center>
-                </form></p>
+                        <input type="hidden" name="userId" th:value="${#authentication.getPrincipal().getUserId()}">
+                        <center><input type="submit" value="отменить запись"></center>
+                    </form>
+                    </p>
                     <br>
                     <hr>
                 </div>
@@ -71,7 +126,8 @@
         </div>
 
 
-        <div sec:authorize="hasRole('ROLE_TRAINER')" class="gym-card" style="background-color: rgba(255,255,255,0.13); width: 550px;">
+        <div sec:authorize="hasRole('ROLE_TRAINER')" class="gym-card"
+             style="background-color: rgba(255,255,255,0.13); width: 550px;">
             <div th:if="${#authentication.getPrincipal().getUserId()==id}">
                 <h2 style="text-align: center">Я тренирую</h2>
                 <div th:each="tr:${ftt}">
@@ -80,14 +136,16 @@
                     <div th:each="tt:${tr.getMyTrainings()}">
                         <p th:text="'Время: ' + ${tt.getTrainingTime().getStartTime()}+ '-'
              + ${tt.getTrainingTime().getEndTime()}"></p>
-                        <p>Клиент: <a style="display: inline; background: none; color: white" th:href="@{'/profile/' + ${tt.getU().getUserId()}}" th:text="${tt.getTrainer().getName()}
+                        <p>Клиент: <a style="display: inline; background: none; color: white"
+                                      th:href="@{'/profile/' + ${tt.getU().getUserId()}}" th:text="${tt.getTrainer().getName()}
                 + ' ' + ${tt.getTrainer().getSurName()}"></a></p>
                         <p th:text="'Адрес: ' + 'город ' + ${tt.getGym().getCity()} + ', улица ' + ${tt.getGym().getStreet()} +', дом ' +${tt.getGym().getHouse()}"></p>
                         <p>
                         <form th:action="@{'/training/'+${tt.getId()}}" method="post">
                             <input type="hidden" name="userId" th:value="${#authentication.getPrincipal().getUserId()}">
                             <center><input type="submit" value="отменить запись"></center>
-                        </form></p>
+                        </form>
+                        </p>
                         <hr style="border: 1px dashed red;">
                     </div>
 
@@ -101,7 +159,25 @@
 
     </div>
 </section>
+<script>
+    function show() {
+        let x = document.getElementById("update")
+        if(x.style.display == "block"){
+            x.style.display = "none"
+        } else {x.style.display = "block"}
 
+    }
+
+    function showPreview(event){
+        if(event.target.files.length > 0){
+            var src = URL.createObjectURL(event.target.files[0]);
+            var preview = document.getElementById("file-ip-1-preview");
+            preview.src = src;
+            preview.style.display = "block";
+        }
+    }
+
+</script>
 
 </body>
 </html>

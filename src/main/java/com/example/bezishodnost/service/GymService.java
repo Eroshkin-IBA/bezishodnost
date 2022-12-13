@@ -49,4 +49,9 @@ public class GymService {
         return gymFromDb.get();
     }
 
+    public void delGym(int id){
+        gymRepository.delete(gymRepository.findById(id).get());
+
+    }
+
 }
